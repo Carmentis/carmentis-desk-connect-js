@@ -1,6 +1,6 @@
 {
   "name": "@cmts-dev/carmentis-desk-connect-js",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Framework-agnostic JS SDK for connecting web applications to Carmentis Desk",
   "type": "module",
   "main": "./dist/index.umd.cjs",
