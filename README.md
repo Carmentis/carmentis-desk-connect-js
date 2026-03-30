@@ -22,16 +22,51 @@ Carmentis Desk (mobile app)
 ## Installation
 
 ```bash
-npm install @cmts-dev/carmentis-desk-connect-js @cmts-dev/carmentis-relay-client
+npm install @cmts-dev/carmentis-desk-connect-js
 # or
-pnpm add @cmts-dev/carmentis-desk-connect-js @cmts-dev/carmentis-relay-client
+pnpm add @cmts-dev/carmentis-desk-connect-js
 ```
 
 ## Usage
 
-### Popup (recommended)
+### JSON-RPC popup (recommended)
 
-The simplest way to integrate — `CarmentisPopup` injects a modal overlay directly into the DOM, handles the connection lifecycle, and shows an "Open Carmentis Desk" button once the session is ready.
+The simplest way to integrate — `createCarmentisJsonRpcPopup` injects a modal overlay directly into the DOM, handles the connection lifecycle, automatically sends your JSON-RPC 2.0 request when Carmentis Desk connects, and resolves with a typed response.
+
+```ts
+import { createCarmentisJsonRpcPopup } from '@cmts-dev/carmentis-desk-connect-js';
+
+const popup = createCarmentisJsonRpcPopup({
+  relayUrl: 'https://relay.testnet.carmentis.io',
+  title: 'Authenticate with Carmentis Desk', // optional
+  request: {
+    jsonrpc: '2.0',
+    id: 1,
+    method: 'wr-auth-pk',
+    params: { base64EncodedChallenge: 'dGVzdA==' },
+  },
+
+  onResponse(response) {
+    console.log('Success:', response.result);
+    popup.close();
+  },
+
+  onError(err) {
+    console.error('JSON-RPC error:', err.message);
+    popup.close();
+  },
+
+  onClose() {
+    console.log('Popup dismissed');
+  },
+});
+
+await popup.open();
+```
+
+### Low-level popup
+
+If you need full control over what is sent (e.g. for non-JSON-RPC messages), use `createCarmentisPopup` directly:
 
 ```ts
 import { createCarmentisPopup } from '@cmts-dev/carmentis-desk-connect-js';
@@ -43,8 +78,10 @@ const popup = createCarmentisPopup({
   onConnected() {
     // Carmentis Desk has joined — send your request
     popup.send({
-      type: 'AUTH_BY_PUBLIC_KEY',
-      base64EncodedChallenge: 'dGVzdA==',
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'wr-auth-pk',
+      params: { base64EncodedChallenge: 'dGVzdA==' },
     });
   },
 
@@ -99,8 +136,10 @@ await session.connect({
   onConnected() {
     // Carmentis Desk has joined the session — send your request
     session.send({
-      type: 'AUTH_BY_PUBLIC_KEY',
-      base64EncodedChallenge: 'dGVzdA==',
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'wr-auth-pk',
+      params: { base64EncodedChallenge: 'dGVzdA==' },
     });
   },
 
@@ -125,13 +164,17 @@ const deepLink = session.getDeepLink();
 
 ### Sending a request
 
-After the session reaches the `connected` state (Carmentis Desk has scanned the QR code), send a request:
+After the session reaches the `connected` state (Carmentis Desk has scanned the QR code), send a JSON-RPC 2.0 request:
 
 ```ts
 session.send({
-  type: 'DATA_APPROVAL',
-  anchorRequestId: '1234',
-  serverUrl: 'https://server.testnet.carmentis.io',
+  jsonrpc: '2.0',
+  id: 1,
+  method: 'wr-data-approval',
+  params: {
+    anchorRequestId: '1234',
+    serverUrl: 'https://server.testnet.carmentis.io',
+  },
 });
 ```
 
@@ -151,6 +194,36 @@ console.log(session.connectionStatus); // 'ready' | 'connected' | …
 ```
 
 ## API
+
+### `createCarmentisJsonRpcPopup(options): CarmentisJsonRpcPopup`
+
+Factory function returning a new `CarmentisJsonRpcPopup` instance. Sends the JSON-RPC request automatically when Carmentis Desk connects and handles response parsing. `options`:
+
+| Property        | Type                                    | Description                                      |
+|-----------------|-----------------------------------------|--------------------------------------------------|
+| `relayUrl`      | `string`                                | URL of the Carmentis relay server                |
+| `request`       | `JsonRpcRequest`                        | JSON-RPC 2.0 request to send on connect          |
+| `title`         | `string?`                               | Modal title (optional)                           |
+| `onReady`       | `() => void`                            | Called when the session is ready                 |
+| `onConnected`   | `() => void`                            | Called when Desk joins the session               |
+| `onDisconnected`| `() => void`                            | Called when the session closes                   |
+| `onResponse`    | `(response: JsonRpcSuccessResponse) => void` | Called on a successful JSON-RPC response    |
+| `onError`       | `(error: Error) => void`                | Called on a JSON-RPC error or invalid response   |
+| `onClose`       | `() => void`                            | Called when the modal is closed                  |
+
+### `jsonRpcPopup.open(): Promise<void>`
+
+Injects the modal into `document.body` and starts the relay session.
+
+### `jsonRpcPopup.close(): void`
+
+Removes the modal from the DOM and calls `onClose`.
+
+### `jsonRpcPopup.getSession(): CarmentisSession`
+
+Returns the underlying `CarmentisSession` instance.
+
+---
 
 ### `createCarmentisPopup(options): CarmentisPopup`
 

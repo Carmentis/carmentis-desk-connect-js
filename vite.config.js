@@ -11,14 +11,6 @@ export default defineConfig({
       name: 'CarmentisConnect',
       fileName: 'index'
     },
-    rollupOptions: {
-      external: ['@cmts-dev/carmentis-relay-client', '@cmts-dev/carmentis-sdk-json-rpc'],
-      output: {
-        globals: {
-          '@cmts-dev/carmentis-relay-client': 'CarmentisRelayClient',
-          '@cmts-dev/carmentis-sdk-json-rpc': 'CarmentisSDKJsonRpc'
-        }
-      }
-    }
+    rollupOptions: {}
   }
 });
