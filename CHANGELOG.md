@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/carmentis/carmentis-desk-connect-js/compare/v1.2.1...v1.3.0) (2026-10-22)
+
+
+### Features
+
+* refine popup UI with updated animations, styles, and accessibility improvements ([ae7b444](https://github.com/carmentis/carmentis-desk-connect-js/commit/ae7b44440b4024aa271d84b92fe0a0630e4c297f))
+
 ## [1.2.1](https://github.com/carmentis/carmentis-desk-connect-js/compare/v1.2.0...v1.2.1) (2026-10-22)
 
 
