@@ -33,12 +33,12 @@
     "@semantic-release/npm": "^13.2.0",
     "semantic-release": "^25.0.9",
     "typescript": "^5.5.3",
-    "vite": "8.0.16",
+    "vite": "8.3.5",
     "vite-plugin-dts": "^4.5.4"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/carmentis/carmentis-desk-connect-js.git"
+    "url": "git+https://github.com/carmentis/carmentis-desk-connect-js.git"
   },
   "publishConfig": {
     "access": "public"
