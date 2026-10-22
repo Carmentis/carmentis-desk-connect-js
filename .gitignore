@@ -1,6 +1,5 @@
 .idea
 carmentis-desk*
-pnpm-workspace.yaml
 /tmp
 /out-tsc
 dist

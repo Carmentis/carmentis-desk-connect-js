@@ -30,10 +30,15 @@
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@types/qrcode": "^1.5.6",
-    "semantic-release": "^24.2.0",
+    "@semantic-release/npm": "^13.2.0",
+    "semantic-release": "^25.0.9",
     "typescript": "^5.5.3",
-    "vite": "^6.0.0",
+    "vite": "8.0.16",
     "vite-plugin-dts": "^4.5.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/carmentis/carmentis-desk-connect-js.git"
   },
   "publishConfig": {
     "access": "public"
