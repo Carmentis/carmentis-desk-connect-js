@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/carmentis/carmentis-desk-connect-js/compare/v1.2.0...v1.2.1) (2026-10-22)
+
+
+### Bug Fixes
+
+* add optional title field to CarmentisPopupOptions interface ([1067667](https://github.com/carmentis/carmentis-desk-connect-js/commit/106766707916d3fbf6ffaff718f9845a49435840))
+
 # [1.2.0](https://github.com/carmentis/carmentis-desk-connect-js/compare/v1.1.0...v1.2.0) (2026-10-22)
 
 
