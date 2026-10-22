@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/carmentis/carmentis-desk-connect-js/compare/v1.1.0...v1.2.0) (2026-10-22)
+
+
+### Features
+
+* enhance popup UX with QR code, technical details, and custom content options ([06bcfc1](https://github.com/carmentis/carmentis-desk-connect-js/commit/06bcfc1be129fef3af816a764ad4b9d81efda70d))
+
 # [1.1.0](https://github.com/Carmentis/carmentis-desk-connect-js/compare/v1.0.0...v1.1.0) (2026-03-30)
 
 
