@@ -6,6 +6,9 @@ export type CarmentisExtraContent = HTMLElement | (() => HTMLElement);
 
 export interface CarmentisPopupOptions {
   relayUrl: string;
+  /**
+   * Title to display above the popup.
+   */
   title?: string;
   /** Display the deep link as text below the QR code. */
   showTechnicalDetails?: boolean;
