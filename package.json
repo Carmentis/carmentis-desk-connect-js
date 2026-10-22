@@ -23,11 +23,13 @@
   },
   "dependencies": {
     "@cmts-dev/carmentis-relay-client": "^1.2.0",
-    "@cmts-dev/carmentis-sdk-json-rpc": "^1.0.2"
+    "@cmts-dev/carmentis-sdk-json-rpc": "^1.0.2",
+    "qrcode": "^1.5.4"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
+    "@types/qrcode": "^1.5.6",
     "semantic-release": "^24.2.0",
     "typescript": "^5.5.3",
     "vite": "^6.0.0",

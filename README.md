@@ -64,6 +64,35 @@ const popup = createCarmentisJsonRpcPopup({
 await popup.open();
 ```
 
+### Authentication and approval popups
+
+Ready-made popups for the common Carmentis Desk requests:
+
+```ts
+import { createCarmentisAuthPopup, createCarmentisApprovalPopup } from '@cmts-dev/carmentis-desk-connect-js';
+
+// Authentication by public key (`wr-auth-pk`)
+const auth = createCarmentisAuthPopup({
+  relayUrl: 'https://relay.testnet.carmentis.io',
+  challenge: 'dGVzdA==', // base64-encoded challenge
+  onResponse: (response) => console.log(response.result),
+  onError: (err) => console.error(err),
+});
+await auth.open();
+
+// Data approval (`wr-data-approval`), displays a "Request Details" panel
+const approval = createCarmentisApprovalPopup({
+  relayUrl: 'https://relay.testnet.carmentis.io',
+  anchorRequestId: '...',
+  serverUrl: 'https://my-server.example.com',
+  showTechnicalDetails: true, // optional: show the deep link
+  onResponse: (response) => console.log(response.result),
+});
+await approval.open();
+```
+
+Both accept the same options as `createCarmentisJsonRpcPopup` (except `request`) and return a `CarmentisJsonRpcPopup`.
+
 ### Low-level popup
 
 If you need full control over what is sent (e.g. for non-JSON-RPC messages), use `createCarmentisPopup` directly:
@@ -102,10 +131,12 @@ The popup goes through four visual states automatically:
 
 | State | Indicator | Info text |
 |-------|-----------|-----------|
-| Initializing | Grey dot | Creating session… |
-| Ready | Pulsing amber dot | Waiting for Carmentis Desk — link shown |
-| Connected | Green dot | Processing request… |
-| Disconnected | Red dot | Session closed |
+| Initializing | Grey pulsing dot | — |
+| Ready | Pulsing amber dot | Open Carmentis Desk via the button or scan the QR code |
+| Connected | Green dot | Connection established, check Carmentis Desk |
+| Disconnected | Red dot | Connection closed |
+
+While the session is `ready`, a QR code of the deep link is displayed. Set `showTechnicalDetails: true` to also display the deep link as text, and use `extraContent` to inject your own element (an `HTMLElement` or a function returning one) above the action button.
 
 You can also access the underlying session at any time:
 
@@ -204,6 +235,8 @@ Factory function returning a new `CarmentisJsonRpcPopup` instance. Sends the JSO
 | `relayUrl`      | `string`                                | URL of the Carmentis relay server                |
 | `request`       | `JsonRpcRequest`                        | JSON-RPC 2.0 request to send on connect          |
 | `title`         | `string?`                               | Modal title (optional)                           |
+| `showTechnicalDetails` | `boolean?`                       | Display the deep link as text                    |
+| `extraContent`  | `HTMLElement \| () => HTMLElement`       | Custom content above the action button           |
 | `onReady`       | `() => void`                            | Called when the session is ready                 |
 | `onConnected`   | `() => void`                            | Called when Desk joins the session               |
 | `onDisconnected`| `() => void`                            | Called when the session closes                   |
@@ -225,6 +258,16 @@ Returns the underlying `CarmentisSession` instance.
 
 ---
 
+### `createCarmentisAuthPopup(options): CarmentisJsonRpcPopup`
+
+Same options as `createCarmentisJsonRpcPopup`, without `request`, plus `challenge: string` (base64-encoded). Sends a `wr-auth-pk` request.
+
+### `createCarmentisApprovalPopup(options): CarmentisJsonRpcPopup`
+
+Same options as `createCarmentisJsonRpcPopup`, without `request`, plus `anchorRequestId: string` and `serverUrl: string`. Sends a `wr-data-approval` request and shows a "Request Details" panel (override with `extraContent`).
+
+---
+
 ### `createCarmentisPopup(options): CarmentisPopup`
 
 Factory function returning a new `CarmentisPopup` instance. `options`:
@@ -233,6 +276,8 @@ Factory function returning a new `CarmentisPopup` instance. `options`:
 |-----------------|-----------------------------|--------------------------------------|
 | `relayUrl`      | `string`                    | URL of the Carmentis relay server    |
 | `title`         | `string?`                   | Modal title (optional)               |
+| `showTechnicalDetails` | `boolean?`           | Display the deep link as text        |
+| `extraContent`  | `HTMLElement \| () => HTMLElement` | Custom content above the action button |
 | `onReady`       | `() => void`                | Called when the session is ready     |
 | `onConnected`   | `() => void`                | Called when Desk joins the session   |
 | `onDisconnected`| `() => void`                | Called when the session closes       |
